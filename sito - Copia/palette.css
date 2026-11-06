@@ -1,0 +1,38 @@
+:root {
+  --midnight-black: #0B1114;
+  --deep-slate: #172329;
+  --misty-grey: #B7C4C5;
+  --cloud-white: #F2F3F0;
+  --cinematic-bronze: #B78A57;
+  --cinematic-bronze-hover: #C49A6C;
+  --forest-green: #526B63;
+
+  --midnight-black-rgb: 11, 17, 20;
+  --cloud-white-rgb: 242, 243, 240;
+  --cinematic-bronze-rgb: 183, 138, 87;
+  --forest-green-rgb: 82, 107, 99;
+
+  --midnight-overlay: rgba(var(--midnight-black-rgb), 0.82);
+  --midnight-glass: rgba(var(--midnight-black-rgb), 0.7);
+  --midnight-soft: rgba(var(--midnight-black-rgb), 0.52);
+  --midnight-subtle: rgba(var(--midnight-black-rgb), 0.16);
+  --cloud-white-88: rgba(var(--cloud-white-rgb), 0.88);
+  --cloud-white-80: rgba(var(--cloud-white-rgb), 0.8);
+  --cloud-white-78: rgba(var(--cloud-white-rgb), 0.78);
+  --cloud-white-75: rgba(var(--cloud-white-rgb), 0.75);
+  --cloud-white-50: rgba(var(--cloud-white-rgb), 0.5);
+  --cloud-white-28: rgba(var(--cloud-white-rgb), 0.28);
+  --cloud-white-20: rgba(var(--cloud-white-rgb), 0.2);
+  --cloud-white-16: rgba(var(--cloud-white-rgb), 0.16);
+  --cloud-white-12: rgba(var(--cloud-white-rgb), 0.12);
+  --cloud-white-10: rgba(var(--cloud-white-rgb), 0.1);
+  --cloud-white-08: rgba(var(--cloud-white-rgb), 0.08);
+  --cloud-white-06: rgba(var(--cloud-white-rgb), 0.06);
+  --cloud-white-04: rgba(var(--cloud-white-rgb), 0.04);
+  --cloud-white-02: rgba(var(--cloud-white-rgb), 0.02);
+  --bronze-80: rgba(var(--cinematic-bronze-rgb), 0.8);
+  --bronze-28: rgba(var(--cinematic-bronze-rgb), 0.28);
+  --bronze-20: rgba(var(--cinematic-bronze-rgb), 0.2);
+  --bronze-18: rgba(var(--cinematic-bronze-rgb), 0.18);
+  --forest-green-20: rgba(var(--forest-green-rgb), 0.2);
+}

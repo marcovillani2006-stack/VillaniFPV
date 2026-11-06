@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SERVIZI | VILLANIFPV</title>
+  <link rel="stylesheet" href="palette.css" />
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--midnight-black);
+      color: var(--cloud-white);
+    }
+
+    body { overflow-x: hidden; }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      height: 82px;
+      background: var(--midnight-overlay);
+      border-bottom: 2px solid var(--cloud-white-12);
+      backdrop-filter: blur(6px);
+    }
+
+    .topbar-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 7%;
+    }
+
+    .brand-menu {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      position: relative;
+      display: inline-block;
+      padding-bottom: 11px;
+      color: var(--cloud-white);
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+    }
+
+    .logo::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 7px;
+      background: linear-gradient(to right, #009246 0 33.33%, #ffffff 33.33% 66.66%, #ce2b37 66.66% 100%);
+    }
+
+    .brand-dropdown {
+      position: absolute;
+      top: calc(50% + 20px);
+      left: 0;
+      display: grid;
+      width: 100%;
+      padding: 10px 0;
+      border-radius: 0 0 14px 14px;
+      background: var(--midnight-glass);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .brand-dropdown a {
+      padding: 11px 16px;
+      color: var(--cloud-white);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .brand-dropdown a:hover,
+    .brand-dropdown a:focus-visible {
+      background: var(--bronze-20);
+      color: var(--cinematic-bronze);
+    }
+
+    .brand-menu:hover .brand-dropdown,
+    .brand-menu:focus-within .brand-dropdown,
+    .brand-menu.is-open .brand-dropdown {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      margin-left: auto;
+    }
+
+    .desktop-nav a {
+      color: var(--cloud-white-88);
+      padding: 8px 4px;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .desktop-nav a:hover,
+    .desktop-nav a:focus-visible {
+      color: var(--cinematic-bronze);
+    }
+
+    .services-page {
+      min-height: 100vh;
+      padding: 122px 7% 72px;
+      background: var(--midnight-black);
+    }
+
+    .services-content {
+      width: min(1240px, 100%);
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .services-intro {
+      max-width: 800px;
+      margin: 0 auto 28px;
+    }
+
+    .section-kicker {
+      display: inline-block;
+      margin: 0 0 18px;
+      color: var(--cinematic-bronze);
+      font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      margin: 0 0 16px;
+      color: var(--cloud-white);
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      font-style: italic;
+    }
+
+    .services-description {
+      max-width: 760px;
+      margin: 0 auto;
+      color: var(--misty-grey);
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
+      line-height: 1.7;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .service-card {
+      min-width: 0;
+      background: var(--deep-slate);
+      border: 1px solid var(--forest-green-20);
+    }
+
+    .service-image-space {
+      width: 100%;
+      aspect-ratio: 1;
+      background: var(--midnight-black);
+      border: 1px solid var(--cloud-white-10);
+    }
+
+    .service-card-content {
+      padding: 14px 0 8px;
+      text-align: center;
+    }
+
+    .service-card h2 {
+      margin: 0 0 8px;
+      color: var(--cloud-white);
+      font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+      letter-spacing: -0.025em;
+    }
+
+    .service-card p {
+      margin: 0;
+      color: var(--misty-grey);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 700px) {
+      .topbar { height: 80px; }
+      .topbar-inner { position: relative; padding: 0 5%; }
+      .logo { padding-bottom: 5px; font-size: 1.25rem; }
+      .logo::after { height: 5px; }
+      .brand-menu { height: auto; align-self: flex-start; margin-top: 12px; align-items: flex-start; }
+      .desktop-nav {
+        position: absolute;
+        right: 5%;
+        top: 48px;
+        left: 5%;
+        display: flex;
+        gap: 14px;
+        margin-left: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+        white-space: nowrap;
+      }
+      .desktop-nav::-webkit-scrollbar { display: none; }
+      .desktop-nav a { flex: 0 0 auto; padding: 4px 2px; font-size: 0.68rem; letter-spacing: 0.08em; }
+      .brand-dropdown {
+        top: calc(50% + 12px);
+        background: var(--midnight-black);
+      }
+      .services-page { padding: 112px 5% 48px; }
+      .services-intro { margin-bottom: 22px; }
+      .section-title { font-size: clamp(2rem, 9vw, 3rem); }
+      .services-grid { grid-template-columns: 1fr; gap: 16px; }
+      .service-card-content { padding: 12px 0 4px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-menu">
+        <a class="logo" href="index.html" aria-haspopup="true" aria-expanded="false">VILLANIFPV</a>
+        <nav class="brand-dropdown" aria-label="Navigazione rapida">
+          <a href="index.html">Home</a>
+          <a href="servizi.html">Servizi</a>
+          <a href="chi-siamo.html">Chi siamo</a>
+          <a href="contatti.html">Contatti</a>
+          <a href="index.html#reel">Reels</a>
+        </nav>
+      </div>
+
+      <nav class="desktop-nav" aria-label="Navigazione principale">
+        <a href="index.html">Home</a>
+        <a href="servizi.html" aria-current="page">Servizi</a>
+        <a href="chi-siamo.html">Chi siamo</a>
+        <a href="contatti.html">Contatti</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="services-page" id="servizi">
+    <div class="services-content">
+      <header class="services-intro">
+        <span class="section-kicker">COSA FACCIAMO</span>
+        <h1 class="section-title">Raccontiamo ogni momento da una prospettiva unica</h1>
+        <p class="services-description">Ogni progetto ha il suo ritmo: realizziamo riprese aeree pensate per valorizzare l’atmosfera, l’energia e i dettagli di ogni occasione.</p>
+      </header>
+
+      <div class="services-grid" aria-label="Le nostre categorie di ripresa">
+        <article class="service-card">
+          <div class="service-image-space" aria-hidden="true"></div>
+          <div class="service-card-content">
+            <h2>Cerimonie</h2>
+            <p>Immagini eleganti e discrete per custodire i momenti più importanti e l’atmosfera della giornata.</p>
+          </div>
+        </article>
+        <article class="service-card">
+          <div class="service-image-space" aria-hidden="true"></div>
+          <div class="service-card-content">
+            <h2>Spettacoli</h2>
+            <p>Riprese che mettono in risalto luci, scenografie e partecipazione, dal vivo e da nuove prospettive.</p>
+          </div>
+        </article>
+        <article class="service-card">
+          <div class="service-image-space" aria-hidden="true"></div>
+          <div class="service-card-content">
+            <h2>Eventi sportivi</h2>
+            <p>Seguiamo azione e movimento con inquadrature dinamiche, per restituire tutta l’energia della competizione.</p>
+          </div>
+        </article>
+        <article class="service-card">
+          <div class="service-image-space" aria-hidden="true"></div>
+          <div class="service-card-content">
+            <h2>Riprese cinematiche</h2>
+            <p>Componiamo immagini fluide e suggestive per raccontare luoghi, persone e progetti con carattere.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const brandMenu = document.querySelector('.brand-menu');
+    const brandLogo = brandMenu.querySelector('.logo');
+    const brandDropdownLinks = brandMenu.querySelectorAll('.brand-dropdown a');
+
+    brandDropdownLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        brandMenu.classList.remove('is-open');
+        brandLogo.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    brandLogo.addEventListener('click', (event) => {
+      if (window.matchMedia('(max-width: 700px)').matches && !brandMenu.classList.contains('is-open')) {
+        event.preventDefault();
+        brandMenu.classList.add('is-open');
+        brandLogo.setAttribute('aria-expanded', 'true');
+      }
+    });
+  </script>
+</body>
+</html>

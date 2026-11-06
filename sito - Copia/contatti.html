@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CONTATTI | VILLANIFPV</title>
+  <link rel="stylesheet" href="palette.css" />
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--midnight-black);
+      color: var(--cloud-white);
+    }
+
+    body {
+      overflow-x: hidden;
+      background: var(--midnight-black);
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      height: 82px;
+      background: var(--midnight-overlay);
+      border-bottom: 2px solid var(--cloud-white-12);
+      backdrop-filter: blur(6px);
+    }
+
+    .contact-page {
+      position: relative;
+      display: grid;
+      min-height: 100vh;
+      min-height: 100svh;
+      padding: 142px 7% 72px;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 82% 48%, var(--forest-green-20), transparent 34%),
+        var(--midnight-black);
+    }
+
+    .contact-content {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.78fr);
+      align-items: center;
+      gap: clamp(40px, 8vw, 120px);
+      width: min(1120px, 100%);
+      margin: auto;
+    }
+
+    .contact-intro {
+      max-width: 620px;
+    }
+
+    .contact-kicker {
+      margin: 0 0 18px;
+      color: var(--cinematic-bronze);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .contact-intro h1 {
+      margin: 0;
+      color: var(--cloud-white);
+      font-size: clamp(2.8rem, 6vw, 5.8rem);
+      letter-spacing: -0.055em;
+      line-height: 0.98;
+    }
+
+    .contact-intro h1 span {
+      color: var(--cinematic-bronze);
+    }
+
+    .contact-description {
+      max-width: 500px;
+      margin: 24px 0 0;
+      color: var(--misty-grey);
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
+      line-height: 1.75;
+    }
+
+    .contact-card {
+      padding: clamp(28px, 4vw, 48px);
+      border: 1px solid var(--forest-green-20);
+      background: var(--deep-slate);
+    }
+
+    .contact-card h2 {
+      margin: 0 0 30px;
+      color: var(--cloud-white);
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      letter-spacing: -0.035em;
+    }
+
+    .contact-details {
+      display: grid;
+      gap: 24px;
+    }
+
+    .contact-item {
+      padding-top: 18px;
+      border-top: 1px solid var(--cloud-white-12);
+    }
+
+    .contact-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--cinematic-bronze);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .contact-line {
+      min-height: 1.6em;
+      color: var(--cloud-white);
+      font-size: clamp(1rem, 1.5vw, 1.2rem);
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    a.contact-line {
+      display: inline-block;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a.contact-line:hover,
+    a.contact-line:focus-visible {
+      color: var(--cinematic-bronze);
+    }
+
+    .topbar-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 7%;
+    }
+
+    .brand-menu {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      position: relative;
+      display: inline-block;
+      padding-bottom: 11px;
+      color: var(--cloud-white);
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+    }
+
+    .logo::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 7px;
+      background: linear-gradient(to right, #009246 0 33.33%, #ffffff 33.33% 66.66%, #ce2b37 66.66% 100%);
+    }
+
+    .brand-dropdown {
+      position: absolute;
+      top: calc(50% + 20px);
+      left: 0;
+      display: grid;
+      width: 100%;
+      padding: 10px 0;
+      border: 0;
+      border-radius: 0 0 14px 14px;
+      background: var(--midnight-glass);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .brand-dropdown a {
+      padding: 11px 16px;
+      color: var(--cloud-white);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .brand-dropdown a:hover,
+    .brand-dropdown a:focus-visible {
+      background: var(--bronze-20);
+      color: var(--cinematic-bronze);
+    }
+
+    .brand-menu:hover .brand-dropdown,
+    .brand-menu:focus-within .brand-dropdown {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .brand-menu.is-open .brand-dropdown {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      margin-left: auto;
+    }
+
+    .desktop-nav a {
+      color: var(--cloud-white-88);
+      padding: 8px 4px;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .desktop-nav a:hover,
+    .desktop-nav a:focus-visible {
+      color: var(--cinematic-bronze);
+    }
+
+    @media (max-width: 700px) {
+      .topbar { height: 80px; }
+      .topbar-inner { position: relative; padding: 0 5%; }
+      .logo { padding-bottom: 5px; font-size: 1.25rem; }
+      .logo::after { height: 5px; }
+      .brand-menu { height: auto; align-self: flex-start; margin-top: 12px; align-items: flex-start; }
+      .brand-dropdown {
+        top: calc(50% + 12px);
+        background: var(--midnight-black);
+      }
+      .desktop-nav {
+        position: absolute;
+        right: 5%;
+        top: 48px;
+        left: 5%;
+        display: flex;
+        gap: 14px;
+        margin-left: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+        white-space: nowrap;
+      }
+      .desktop-nav::-webkit-scrollbar { display: none; }
+      .desktop-nav a { flex: 0 0 auto; padding: 4px 2px; font-size: 0.68rem; letter-spacing: 0.08em; }
+      .contact-page {
+        padding: 142px 6% 56px;
+        background:
+          radial-gradient(ellipse at 50% 20%, var(--forest-green-20), transparent 38%),
+          var(--midnight-black);
+      }
+      .contact-content {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .contact-intro h1 {
+        font-size: clamp(2.7rem, 12vw, 4.1rem);
+      }
+      .contact-description {
+        margin-top: 18px;
+        font-size: 1rem;
+      }
+      .contact-card { padding: 26px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-menu">
+        <a class="logo" href="index.html" aria-haspopup="true" aria-expanded="false">VILLANIFPV</a>
+        <nav class="brand-dropdown" aria-label="Navigazione rapida">
+          <a href="index.html">Home</a>
+          <a href="servizi.html">Servizi</a>
+          <a href="chi-siamo.html">Chi siamo</a>
+          <a href="contatti.html">Contatti</a>
+          <a href="index.html#reel">reels</a>
+        </nav>
+      </div>
+
+      <nav class="desktop-nav" aria-label="Navigazione principale">
+        <a href="index.html">Home</a>
+        <a href="servizi.html">Servizi</a>
+        <a href="chi-siamo.html">Chi siamo</a>
+        <a href="contatti.html" aria-current="page">Contatti</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="contact-page">
+    <div class="contact-content">
+      <section class="contact-intro" aria-labelledby="contact-title">
+       
+        <h1 id="contact-title">Diamo forma alla tua prossima <span>storia.</span></h1>
+        <p class="contact-description">
+          Raccontaci il tuo progetto: scegliamo i droni più adatti e lo realizziamo insieme.
+        </p>
+      </section>
+      <section class="contact-card" aria-label="Recapiti">
+        <h2>Contattaci</h2>
+        <div class="contact-details">
+          <div class="contact-item">
+            <span class="contact-label">Email</span>
+            <div class="contact-line" id="email-line"></div>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Telefono</span>
+            <div class="contact-line" id="phone-line"></div>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Instagram</span>
+            <a class="contact-line" id="instagram-line" href="https://www.instagram.com/marco.villani__/" target="_blank" rel="noopener noreferrer"></a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const contactLines = [
+      { element: document.getElementById('email-line'), text: 'marcovillani2006@gmail.com' },
+      { element: document.getElementById('phone-line'), text: '+39 3711184473' },
+      { element: document.getElementById('instagram-line'), text: '@marco.villani__' }
+    ];
+
+    function typeContactLine(line, index) {
+      let characterIndex = 0;
+
+      function typeNextCharacter() {
+        line.element.textContent = line.text.slice(0, characterIndex);
+        characterIndex += 1;
+
+        if (characterIndex <= line.text.length) {
+          window.setTimeout(typeNextCharacter, 20);
+        } else if (contactLines[index + 1]) {
+          window.setTimeout(() => typeContactLine(contactLines[index + 1], index + 1), 80);
+        }
+      }
+
+      typeNextCharacter();
+    }
+
+    typeContactLine(contactLines[0], 0);
+
+    const brandMenu = document.querySelector('.brand-menu');
+    const brandLogo = brandMenu.querySelector('.logo');
+    const brandDropdownLinks = brandMenu.querySelectorAll('.brand-dropdown a');
+
+    brandDropdownLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        brandMenu.classList.remove('is-open');
+        brandLogo.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    brandLogo.addEventListener('click', (event) => {
+      if (window.matchMedia('(max-width: 700px)').matches && !brandMenu.classList.contains('is-open')) {
+        event.preventDefault();
+        brandMenu.classList.add('is-open');
+        brandLogo.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!brandMenu.contains(event.target)) {
+        brandMenu.classList.remove('is-open');
+        brandLogo.setAttribute('aria-expanded', 'false');
+      }
+    });
+  </script>
+
+</body>
+</html>

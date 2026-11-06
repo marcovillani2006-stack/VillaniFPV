@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHI SIAMO | VILLANIFPV</title>
+  <link rel="stylesheet" href="palette.css" />
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--midnight-black);
+      color: var(--cloud-white);
+    }
+
+    body { overflow-x: hidden; }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      height: 82px;
+      background: var(--midnight-overlay);
+      border-bottom: 2px solid var(--cloud-white-12);
+      backdrop-filter: blur(6px);
+    }
+
+    .topbar-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 7%;
+    }
+
+    .brand-menu {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      position: relative;
+      display: inline-block;
+      padding-bottom: 11px;
+      color: var(--cloud-white);
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-decoration: none;
+    }
+
+    .logo::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 7px;
+      background: linear-gradient(to right, #009246 0 33.33%, #ffffff 33.33% 66.66%, #ce2b37 66.66% 100%);
+    }
+
+    .brand-dropdown {
+      position: absolute;
+      top: calc(50% + 20px);
+      left: 0;
+      display: grid;
+      width: 100%;
+      padding: 10px 0;
+      border-radius: 0 0 14px 14px;
+      background: var(--midnight-glass);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .brand-dropdown a {
+      padding: 11px 16px;
+      color: var(--cloud-white);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .brand-dropdown a:hover,
+    .brand-dropdown a:focus-visible {
+      background: var(--bronze-20);
+      color: var(--cinematic-bronze);
+    }
+
+    .brand-menu:hover .brand-dropdown,
+    .brand-menu:focus-within .brand-dropdown,
+    .brand-menu.is-open .brand-dropdown {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      margin-left: auto;
+    }
+
+    .desktop-nav a {
+      color: var(--cloud-white-88);
+      padding: 8px 4px;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .desktop-nav a:hover,
+    .desktop-nav a:focus-visible {
+      color: var(--cinematic-bronze);
+    }
+
+    .about-page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 140px 7% 80px;
+      background: var(--midnight-black);
+    }
+
+    .about-content {
+      width: min(900px, 100%);
+      padding: clamp(32px, 6vw, 72px);
+      background: var(--deep-slate);
+      border: 1px solid var(--forest-green-20);
+    }
+
+    .about-kicker {
+      color: var(--cinematic-bronze);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 700px;
+      margin: 18px 0 24px;
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+    }
+
+    p {
+      max-width: 680px;
+      margin: 0;
+      color: var(--misty-grey);
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      line-height: 1.7;
+    }
+
+    .about-link {
+      display: inline-flex;
+      margin-top: 32px;
+      padding: 15px 24px;
+      border: 1px solid var(--misty-grey);
+      border-radius: 10px;
+      color: var(--cloud-white);
+      text-decoration: none;
+      font-weight: 700;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    .about-link:hover,
+    .about-link:focus-visible {
+      background: var(--bronze-20);
+      border-color: var(--cinematic-bronze);
+      color: var(--cinematic-bronze-hover);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 700px) {
+      .topbar { height: 80px; }
+      .topbar-inner { position: relative; padding: 0 5%; }
+      .logo { padding-bottom: 5px; font-size: 1.25rem; }
+      .logo::after { height: 5px; }
+      .brand-menu { height: auto; align-self: flex-start; margin-top: 12px; align-items: flex-start; }
+      .desktop-nav {
+        position: absolute;
+        right: 5%;
+        top: 48px;
+        left: 5%;
+        display: flex;
+        gap: 14px;
+        margin-left: 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+        white-space: nowrap;
+      }
+      .desktop-nav::-webkit-scrollbar { display: none; }
+      .desktop-nav a { flex: 0 0 auto; padding: 4px 2px; font-size: 0.68rem; letter-spacing: 0.08em; }
+      .brand-dropdown {
+        top: calc(50% + 12px);
+        background: var(--midnight-black);
+      }
+      .about-page { padding: 106px 5% 48px; }
+      .about-content { padding: 30px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-menu">
+        <a class="logo" href="index.html" aria-haspopup="true" aria-expanded="false">VILLANIFPV</a>
+        <nav class="brand-dropdown" aria-label="Navigazione rapida">
+          <a href="index.html">Home</a>
+          <a href="servizi.html">Servizi</a>
+          <a href="chi-siamo.html">Chi siamo</a>
+          <a href="contatti.html">Contatti</a>
+          <a href="index.html#reel">Reels</a>
+        </nav>
+      </div>
+
+      <nav class="desktop-nav" aria-label="Navigazione principale">
+        <a href="index.html">Home</a>
+        <a href="servizi.html">Servizi</a>
+        <a href="chi-siamo.html" aria-current="page">Chi siamo</a>
+        <a href="contatti.html">Contatti</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="about-page" aria-label="Chi siamo">
+    <h1>PAGINA IN COSTRUZIONE</h1>
+  </main>
+
+  <script>
+    const brandMenu = document.querySelector('.brand-menu');
+    const brandLogo = brandMenu.querySelector('.logo');
+    const brandDropdownLinks = brandMenu.querySelectorAll('.brand-dropdown a');
+
+    brandDropdownLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        brandMenu.classList.remove('is-open');
+        brandLogo.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    brandLogo.addEventListener('click', (event) => {
+      if (window.matchMedia('(max-width: 700px)').matches && !brandMenu.classList.contains('is-open')) {
+        event.preventDefault();
+        brandMenu.classList.add('is-open');
+        brandLogo.setAttribute('aria-expanded', 'true');
+      }
+    });
+  </script>
+</body>
+</html>

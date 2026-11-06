@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VILLANIFPV</title>
+  <link rel="stylesheet" href="palette.css" />
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--midnight-black);
+      color: var(--cloud-white);
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      height: 82px;
+      background: var(--midnight-overlay);
+      border-bottom: 2px solid var(--cloud-white-12);
+      backdrop-filter: blur(6px);
+    }
+
+    .topbar-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 7%;
+    }
+
+    .brand-menu {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      position: relative;
+      display: inline-block;
+      padding-bottom: 11px;
+      font-size: 1.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--cloud-white);
+      text-decoration: none;
+    }
+
+    .logo::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 7px;
+      background: linear-gradient(to right, #009246 0 33.33%, #ffffff 33.33% 66.66%, #ce2b37 66.66% 100%);
+    }
+
+    .brand-dropdown {
+      position: absolute;
+      top: calc(50% + 20px);
+      left: 0;
+      display: grid;
+      width: 100%;
+      padding: 10px 0;
+      border: 0;
+      border-radius: 0 0 14px 14px;
+      background: var(--midnight-glass);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .brand-dropdown a {
+      padding: 11px 16px;
+      color: var(--cloud-white);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .brand-dropdown a:hover,
+    .brand-dropdown a:focus-visible {
+      background: var(--bronze-20);
+    }
+
+    .brand-menu:hover .brand-dropdown,
+    .brand-menu:focus-within .brand-dropdown {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .brand-menu.is-open .brand-dropdown {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .menu {
+      display: flex;
+      gap: 24px;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--misty-grey);
+    }
+
+    .menu a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      margin-left: auto;
+    }
+
+    .desktop-nav a {
+      color: var(--cloud-white-88);
+      padding: 8px 4px;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .desktop-nav a:hover,
+    .desktop-nav a:focus-visible {
+      color: var(--cinematic-bronze);
+    }
+
+    .video-hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: visible;
+      background: var(--midnight-black);
+      padding-top: 82px;
+    }
+
+    .video-hero video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: calc(100% + 110px);
+      object-fit: cover;
+      filter: brightness(0.52) saturate(0.88);
+    }
+
+    .youtube-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      object-fit: cover;
+      filter: brightness(0.52) saturate(0.88);
+      background: var(--midnight-black);
+    }
+
+    .fullscreen-video-frame iframe,
+    .vertical-video-card iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: var(--midnight-black);
+    }
+
+    .divider {
+      width: 100%;
+      height: 10px;
+      background: var(--midnight-black);
+      border-top: 1px solid var(--cloud-white-08);
+      border-bottom: 1px solid var(--cloud-white-08);
+    }
+
+    .desktop-video-divider {
+      position: relative;
+      z-index: 10;
+      display: block;
+      height: 24px;
+      background: var(--midnight-black);
+      border: 0;
+    }
+
+    .fullscreen-video {
+      position: relative;
+      width: 100%;
+      height: 42.857vw;
+      overflow: hidden;
+      background: var(--midnight-black);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      will-change: transform;
+    }
+
+    .fullscreen-video-frame {
+      position: relative;
+      flex-shrink: 0;
+      width: 100%;
+      height: 42.857vw;
+    }
+
+    .fullscreen-video-frame::after {
+      display: none;
+    }
+
+    .fullscreen-video-frame video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-category-divider {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: clamp(120px, 14vw, 190px);
+      padding: clamp(16px, 2vw, 28px) 7%;
+      overflow: hidden;
+      background: var(--deep-slate);
+    }
+
+    .video-category-divider h2 {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: clamp(16px, 2vw, 36px);
+      width: 100%;
+      margin: 0;
+      color: var(--cloud-white);
+      font-size: clamp(3.2rem, 8vw, 7rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 0.8;
+      text-transform: uppercase;
+    }
+
+    .video-category-divider h2 span {
+      display: block;
+    }
+
+    .video-category-divider h2 span:last-child {
+      margin-top: 0;
+    }
+
+    .vertical-videos-section {
+      width: 100%;
+      margin-top: 0;
+      padding: 20px 2% 80px;
+      background: var(--midnight-black);
+      position: relative;
+      isolation: isolate;
+      scroll-margin-top: 110px;
+    }
+
+    .drone-image {
+      position: relative;
+      top: -260px;
+      left: 50%;
+      z-index: 0;
+      display: block;
+      width: min(1750px, calc(100% + 500px));
+      height: auto;
+      margin: 0 0 -500px;
+      transform: translateX(-50%);
+    }
+
+    .carousel-photo-column {
+      position: absolute;
+      top: 230px;
+      z-index: 1;
+      display: grid;
+      width: min(180px, calc((100% - 1100px) / 2 - 28px));
+      gap: clamp(18px, 2vw, 28px);
+      pointer-events: none;
+    }
+
+    .carousel-photo-column--left {
+      left: 18px;
+    }
+
+    .carousel-photo-column--right {
+      right: 18px;
+    }
+
+    .carousel-photo-print {
+      margin: 0;
+      padding: 7px 7px 20px;
+      background: var(--cloud-white);
+      box-shadow: 0 8px 18px rgba(var(--midnight-black-rgb), 0.28);
+    }
+
+    .carousel-photo-print:nth-child(odd) {
+      transform: rotate(-3deg);
+    }
+
+    .carousel-photo-print:nth-child(even) {
+      transform: rotate(3deg);
+    }
+
+    .carousel-photo-print img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+    }
+
+    .carousel-photo-scatter {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .carousel-photo-scatter .carousel-photo-print {
+      position: absolute;
+      width: clamp(112px, 8vw, 156px);
+      padding: 6px 6px 8px;
+      opacity: 0.9;
+    }
+
+    .carousel-photo-scatter .carousel-photo-print:nth-child(1) {
+      top: -135px;
+      left: 22%;
+      transform: rotate(7deg);
+    }
+
+    .carousel-photo-scatter .carousel-photo-print:nth-child(2) {
+      top: -75px;
+      right: 21%;
+      transform: rotate(-6deg);
+    }
+
+    .carousel-photo-scatter .carousel-photo-print:nth-child(3) {
+      top: 125px;
+      left: 19%;
+      transform: rotate(-5deg);
+    }
+
+    .carousel-photo-scatter .carousel-photo-print:nth-child(4) {
+      top: 175px;
+      right: 19%;
+      transform: rotate(6deg);
+    }
+
+    .carousel-photo-scatter .carousel-photo-print:nth-child(5) {
+      top: 245px;
+      left: 14%;
+      transform: rotate(4deg);
+    }
+
+    .carousel-photo-scatter .carousel-photo-print:nth-child(6) {
+      top: 280px;
+      right: 14%;
+      transform: rotate(-7deg);
+    }
+
+    .carousel-photo-scatter .carousel-photo-print:nth-child(7) {
+      top: 300px;
+      left: 20%;
+      transform: rotate(-4deg);
+    }
+
+    .carousel-photo-scatter .carousel-photo-print:nth-child(8) {
+      top: 285px;
+      right: 20%;
+      transform: rotate(5deg);
+    }
+
+    .vertical-videos-grid {
+      position: relative;
+      z-index: 2;
+      width: min(1100px, 100%);
+      height: 700px;
+      margin: 0 auto;
+      perspective: 1200px;
+      transform-style: preserve-3d;
+      touch-action: pan-y;
+    }
+
+    @media (max-width: 1359px) {
+      .carousel-photo-column,
+      .carousel-photo-scatter {
+        display: none;
+      }
+    }
+
+    .vertical-video-card {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: min(360px, 33%);
+      height: 640px;
+      transform-origin: 50% 100%;
+      transition: transform 0.75s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.75s ease, filter 0.75s ease;
+      will-change: transform;
+      transform-style: preserve-3d;
+    }
+
+    .vertical-video-card[data-position="left"],
+    .vertical-video-card[data-position="right"] {
+      cursor: pointer;
+    }
+
+    .vertical-video-card[data-position="left"]::after,
+    .vertical-video-card[data-position="right"]::after {
+      content: "";
+      position: absolute;
+      inset: -48px;
+      z-index: 0;
+    }
+
+    .vertical-video-card[data-position="center"] {
+      z-index: 3;
+      transform: translateX(-50%) translateZ(220px) rotateY(0deg);
+    }
+
+    .vertical-video-card[data-position="left"] {
+      z-index: 1;
+      opacity: 0.72;
+      filter: brightness(0.65);
+      transform: translateX(-155%);
+    }
+
+    .vertical-video-card[data-position="right"] {
+      z-index: 2;
+      opacity: 0.72;
+      filter: brightness(0.65);
+      transform: translateX(55%);
+    }
+
+    .vertical-video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: var(--deep-slate);
+      border: 1px solid var(--cloud-white-12);
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .video-play-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 5;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 68px;
+      height: 68px;
+      border: 1px solid var(--cloud-white-75);
+      border-radius: 50%;
+      background: var(--midnight-soft);
+      color: var(--cloud-white);
+      font: inherit;
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+      transform: translate(-50%, -50%) translateZ(420px);
+      transition: opacity 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .vertical-video-card[data-position="left"] .video-play-overlay,
+    .vertical-video-card[data-position="right"] .video-play-overlay {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .video-play-overlay:hover {
+      background: var(--midnight-overlay);
+      color: var(--cinematic-bronze);
+      transform: translate(-50%, -50%) translateZ(420px) scale(1.06);
+    }
+
+    .video-play-overlay.is-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .video-carousel-controls {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 12px auto 0;
+    }
+
+    .video-carousel-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 48px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: var(--cloud-white);
+      font: inherit;
+      font-size: 2.4rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .video-carousel-button:hover,
+    .video-carousel-button:focus-visible {
+      background: transparent;
+      color: var(--cinematic-bronze);
+      transform: translateY(-2px);
+    }
+
+    .video-media-controls {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      justify-content: center;
+      margin: 20px auto 0;
+      scroll-margin-top: 110px;
+    }
+
+    .video-media-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--cloud-white-28);
+      border-radius: 50%;
+      background: var(--cloud-white-08);
+      color: var(--cloud-white);
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .video-media-button:hover,
+    .video-media-button:focus-visible {
+      border-color: var(--bronze-80);
+      background: var(--bronze-18);
+      color: var(--cinematic-bronze);
+      transform: scale(1.06);
+    }
+
+    .video-media-button:focus-visible {
+      outline: 2px solid var(--cinematic-bronze);
+      outline-offset: 3px;
+    }
+
+    .video-media-button svg {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+
+    .video-media-button .sound-waves,
+    .video-media-button .sound-slash {
+      display: none;
+    }
+
+    .video-media-button:not(.is-muted) .sound-waves,
+    .video-media-button.is-muted .sound-slash {
+      display: block;
+    }
+
+    @media (max-width: 700px) {
+      .video-category-divider h2 {
+        display: block;
+      }
+
+      .video-category-divider h2 span:last-child {
+        margin-top: 0.12em;
+        text-align: right;
+      }
+
+      .vertical-videos-section {
+        margin-top: 0;
+        padding: 16px 7% 48px;
+        overflow-x: hidden;
+        isolation: auto;
+      }
+
+      .carousel-photo-column {
+        display: none;
+      }
+
+      .vertical-videos-grid {
+        width: 100%;
+        height: 510px;
+      }
+
+      .video-media-controls {
+        margin: 8px auto 0;
+        scroll-margin-top: 40px;
+      }
+
+      .video-carousel-controls {
+        margin: -12px auto 0;
+      }
+
+      .drone-image {
+        top: -80px;
+        left: 50%;
+        z-index: 3;
+        right: auto;
+        max-width: none;
+        width: 120vw;
+        margin: 0 auto -90px;
+        transform: translateX(-50%);
+      }
+
+      .vertical-video {
+        width: min(260px, 72vw);
+        height: 462px;
+      }
+
+      .vertical-video-card {
+        width: min(260px, 72vw);
+        height: 462px;
+      }
+
+      .vertical-video-card[data-position="center"] {
+        transform: translateX(-50%) translateZ(120px) rotateY(0deg);
+      }
+
+      .vertical-video-card[data-position="left"] {
+        transform: translateX(-125%);
+      }
+
+      .vertical-video-card[data-position="right"] {
+        transform: translateX(25%);
+      }
+    }
+
+    .drone {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 220px;
+      height: 120px;
+      transform: translate(-50%, -50%) rotate(-12deg);
+    }
+
+    .drone-body {
+      position: absolute;
+      left: 50%;
+      top: 54%;
+      width: 150px;
+      height: 42px;
+      background: var(--midnight-black);
+      border-radius: 16px;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 0 1px var(--cloud-white-06);
+    }
+
+    .drone-body::before,
+    .drone-body::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--deep-slate);
+      top: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 0 0 4px var(--cloud-white-04);
+    }
+
+    .drone-body::before { left: 18px; }
+    .drone-body::after { right: 18px; }
+
+    .arm {
+      position: absolute;
+      background: var(--midnight-black);
+      border-radius: 999px;
+      box-shadow: 0 0 0 1px var(--cloud-white-04);
+    }
+
+    .arm.horizontal {
+      left: 50%;
+      top: 50%;
+      width: 180px;
+      height: 8px;
+      transform: translate(-50%, -50%);
+    }
+
+    .arm.vertical {
+      left: 50%;
+      top: 50%;
+      width: 8px;
+      height: 110px;
+      transform: translate(-50%, -50%);
+    }
+
+    .prop {
+      position: absolute;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, var(--deep-slate) 0%, var(--midnight-black) 60%, var(--midnight-black) 100%);
+      border: 2px solid var(--cloud-white-08);
+      box-shadow: inset 0 0 0 8px var(--cloud-white-02);
+    }
+
+    .prop::before,
+    .prop::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 2px;
+      height: 58px;
+      background: var(--cloud-white-10);
+      border-radius: 999px;
+    }
+
+    .prop::after {
+      width: 58px;
+      height: 2px;
+    }
+
+    .prop.p1 { left: 12px; top: 12px; }
+    .prop.p2 { right: 12px; top: 12px; }
+    .prop.p3 { left: 12px; bottom: 12px; }
+    .prop.p4 { right: 12px; bottom: 12px; }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      height: calc(100% + 110px);
+      background: linear-gradient(90deg, rgba(var(--midnight-black-rgb), 0.82), rgba(var(--midnight-black-rgb), 0.25), rgba(var(--midnight-black-rgb), 0.5));
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 40px 7%;
+    }
+
+    .text-box {
+      max-width: 700px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--cloud-white-20);
+      background: var(--cloud-white-06);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--cinematic-bronze);
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3rem, 7vw, 7rem);
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+    }
+
+    p {
+      margin: 20px 0 30px;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      max-width: 620px;
+      color: var(--misty-grey);
+      line-height: 1.6;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 64px;
+      padding: 0 32px;
+      border-radius: 14px;
+      border: 1px solid var(--cloud-white-20);
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 700;
+      transition: transform 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn.primary {
+      background: var(--cinematic-bronze);
+      color: var(--midnight-black);
+      border: 0.5px solid var(--cinematic-bronze);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .btn.primary:hover,
+    .btn.primary:focus-visible {
+      background: var(--cinematic-bronze-hover);
+    }
+
+    .btn.secondary {
+      background: transparent;
+      border-color: var(--misty-grey);
+      color: var(--misty-grey);
+    }
+
+    @media (max-width: 700px) {
+      .topbar {
+        height: 80px;
+      }
+
+      .topbar-inner {
+        position: relative;
+        padding: 0 5%;
+      }
+
+      .logo {
+        padding-bottom: 5px;
+        font-size: 1.25rem;
+      }
+
+      .logo::after {
+        height: 5px;
+      }
+
+      .brand-menu {
+        height: auto;
+        align-self: flex-start;
+        margin-top: 12px;
+        align-items: flex-start;
+      }
+
+      .brand-dropdown {
+        top: calc(50% + 12px);
+        background: var(--midnight-black);
+      }
+
+      .desktop-nav {
+        position: absolute;
+        right: 5%;
+        top: 48px;
+        left: 5%;
+        display: flex;
+        gap: 14px;
+        margin-left: 0;
+        overflow-x: auto;
+        justify-content: flex-start;
+        scrollbar-width: none;
+        white-space: nowrap;
+      }
+
+      .desktop-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .desktop-nav a {
+        flex: 0 0 auto;
+        padding: 4px 2px;
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+      }
+
+      .video-hero {
+        padding-top: 80px;
+        z-index: 0;
+      }
+
+      .video-hero > video,
+      .video-hero .overlay {
+        height: calc(100% + 82px);
+      }
+
+      .desktop-video-divider {
+        display: none;
+      }
+
+      .fullscreen-video {
+        z-index: 2;
+        height: max(200px, min(56.25vw, 60vh));
+        margin-bottom: calc(-1 * var(--parallax-offset, 0px));
+        overflow: visible;
+      }
+
+      .fullscreen-video-frame {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        aspect-ratio: auto;
+        transform: translate3d(0, calc(-1 * var(--parallax-offset, 0px)), 0);
+      }
+
+      .fullscreen-video-frame::after {
+        display: none;
+      }
+
+      .fullscreen-video-frame video {
+        width: 100%;
+        height: 100%;
+        aspect-ratio: auto;
+        object-fit: cover;
+      }
+
+      .content {
+        align-items: flex-start;
+        padding: 30px 5% 52px;
+      }
+
+      .text-box {
+        max-width: 100%;
+      }
+
+      h1 {
+        font-size: clamp(2.5rem, 12vw, 4rem);
+      }
+
+      p {
+        font-size: 1.05rem;
+        margin: 16px 0 24px;
+      }
+
+      .btn {
+        min-height: 56px;
+        padding: 0 28px;
+        font-size: 1.05rem;
+      }
+
+    }
+
+    @media (max-width: 700px) and (orientation: landscape) {
+      .video-hero {
+        min-height: 100vh;
+      }
+
+      .content {
+        min-height: calc(100vh - 64px);
+        padding: 18px 5% 28px;
+      }
+
+      .text-box {
+        max-width: 72%;
+      }
+
+      h1 {
+        font-size: clamp(1.8rem, 6vw, 2.8rem);
+      }
+
+      p {
+        max-width: 560px;
+        margin: 10px 0 14px;
+        font-size: 0.88rem;
+        line-height: 1.35;
+      }
+
+      .btn {
+        min-height: 50px;
+        padding: 0 24px;
+      }
+    }
+
+    @media (max-width: 700px) and (orientation: portrait) {
+      .video-hero {
+        height: 88vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-menu">
+        <a class="logo" href="index.html" aria-haspopup="true" aria-expanded="false">VILLANIFPV</a>
+        <nav class="brand-dropdown" aria-label="Navigazione rapida">
+          <a href="index.html">Home</a>
+          <a href="servizi.html">Servizi</a>
+          <a href="chi-siamo.html">Chi siamo</a>
+          <a href="contatti.html">Contatti</a>
+          <a href="index.html#reel">Reels</a>
+        </nav>
+      </div>
+
+      <nav class="desktop-nav" aria-label="Navigazione principale">
+        <a href="index.html">Home</a>
+        <a href="servizi.html" aria-current="page">Servizi</a>
+        <a href="chi-siamo.html">Chi siamo</a>
+        <a href="contatti.html">Contatti</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="video-hero">
+    <video muted loop playsinline preload="metadata">
+      <source src="LandingPage.mp4" type="video/mp4">
+    </video>
+
+    <div class="overlay"></div>
+
+    <div class="content">
+      <div class="text-box">
+        <h1>Il tuo mondo da un punto di vista unico</h1>
+        <p>
+          Video e foto drone per eventi, immobili e aziende. Realizziamo immagini cinematiche che raccontano il tuo brand con impatto.
+        </p>
+        <div class="buttons">
+          <a href="contatti.html" class="btn primary">Prenota</a>
+        </div>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <section class="fullscreen-video" aria-label="Video a schermo intero">
+    <div class="fullscreen-video-frame">
+      <video id="illustration-video" muted loop playsinline preload="metadata">
+        <source src="Illustrazione.mp4" type="video/mp4">
+      </video>
+    </div>
+  </section>
+
+
+  <section class="vertical-videos-section" aria-label="Video verticali">
+    <img class="drone-image" src="Nuova%20cartella/droneAir3s.png" alt="Drone Air 3S">
+
+    <aside class="carousel-photo-column carousel-photo-column--left" aria-label="Fotografie aeree">
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_00010.jpg" alt="Ripresa aerea di un borgo tra le montagne" loading="lazy" decoding="async">
+      </figure>
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_0026.jpg" alt="Paesaggio montano ripreso dal drone" loading="lazy" decoding="async">
+      </figure>
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_0025.jpg" alt="Vista aerea di un borgo sul lago" loading="lazy" decoding="async">
+      </figure>
+    </aside>
+
+    <aside class="carousel-photo-column carousel-photo-column--right" aria-label="Altri scatti aerei">
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_0480.jpg" alt="Colline e vallate riprese dall’alto" loading="lazy" decoding="async">
+      </figure>
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_0338.jpg" alt="Tramonto sulle colline" loading="lazy" decoding="async">
+      </figure>
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_0949.jpg" alt="Creste montuose al tramonto" loading="lazy" decoding="async">
+      </figure>
+    </aside>
+
+    <div class="carousel-photo-scatter" aria-hidden="true">
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_0001.jpg" alt="" loading="lazy" decoding="async">
+      </figure>
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_0002.jpg" alt="" loading="lazy" decoding="async">
+      </figure>
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_0003.jpg" alt="" loading="lazy" decoding="async">
+      </figure>
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_0004%20(2).jpg" alt="" loading="lazy" decoding="async">
+      </figure>
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_0014.jpg" alt="" loading="lazy" decoding="async">
+      </figure>
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_0015.jpg" alt="" loading="lazy" decoding="async">
+      </figure>
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_0023.jpg" alt="" loading="lazy" decoding="async">
+      </figure>
+      <figure class="carousel-photo-print">
+        <img src="immaginisfondo/collage/DJI_0846.jpg" alt="" loading="lazy" decoding="async">
+      </figure>
+    </div>
+
+    <div class="vertical-videos-grid">
+      <div class="vertical-video-card" data-position="center">
+        <video class="vertical-video" muted loop playsinline preload="metadata">
+          <source src="FPV.mp4" type="video/mp4">
+        </video>
+        <button class="video-play-overlay" type="button" aria-label="Riproduci video">&#9654;</button>
+      </div>
+
+      <div class="vertical-video-card" data-position="right">
+        <video class="vertical-video" muted loop playsinline preload="metadata">
+          <source src="catria2.mp4" type="video/mp4">
+        </video>
+        <button class="video-play-overlay" type="button" aria-label="Riproduci video">&#9654;</button>
+      </div>
+
+      <div class="vertical-video-card" data-position="left">
+        <div class="vertical-video black-video" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="video-carousel-controls" aria-label="Controlli video">
+      <button class="video-carousel-button" type="button" data-direction="left" aria-label="Ruota i video a sinistra">&#8249;</button>
+      <button class="video-carousel-button" type="button" data-direction="right" aria-label="Ruota i video a destra">&#8250;</button>
+    </div>
+
+    <div class="video-media-controls" aria-label="Riproduzione e audio">
+      <button class="video-media-button is-muted" id="video-audio-toggle" type="button" aria-label="Attiva audio" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+          <g class="sound-waves">
+            <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+            <path d="M18.5 5.5a9 9 0 0 1 0 13"></path>
+          </g>
+          <path class="sound-slash" d="m16 9 5 6m0-6-5 6"></path>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <script>
+    const fullscreenVideo = document.querySelector('.fullscreen-video');
+    const illustrationVideo = document.getElementById('illustration-video');
+    const illustrationSource = illustrationVideo ? illustrationVideo.querySelector('source') : null;
+
+    function toYouTubeEmbedUrl(rawUrl) {
+      if (!rawUrl) {
+        return '';
+      }
+
+      const trimmed = rawUrl.trim();
+      const match = trimmed.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+      const videoId = match ? match[1] : trimmed.match(/([A-Za-z0-9_-]{11})/)?.[1] || '';
+
+      if (!videoId) {
+        return trimmed;
+      }
+
+      const params = new URLSearchParams({
+        autoplay: '1',
+        mute: '1',
+        loop: '1',
+        playlist: videoId,
+        controls: '0',
+        rel: '0',
+        playsinline: '1',
+        enablejsapi: '1'
+      });
+
+      if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+        params.set('origin', window.location.origin);
+      }
+
+      return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+    }
+
+    function replaceVideoWithYoutube(videoElement) {
+      const rawUrl = videoElement.dataset.youtubeUrl || '';
+      const embedUrl = toYouTubeEmbedUrl(rawUrl);
+
+      if (!embedUrl || !rawUrl.includes('youtube') && !rawUrl.includes('youtu.be')) {
+        return;
+      }
+
+      const iframe = document.createElement('iframe');
+      iframe.src = embedUrl;
+      iframe.title = 'Video YouTube';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      iframe.allowFullscreen = true;
+      iframe.loading = videoElement.id === 'illustration-video' ? 'eager' : 'lazy';
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.className = `${videoElement.className} youtube-video`;
+
+      const wrapper = videoElement.parentElement;
+      wrapper.replaceChild(iframe, videoElement);
+    }
+
+    document.querySelectorAll('video[data-youtube-url]').forEach(replaceVideoWithYoutube);
+
+    const verticalVideos = document.querySelectorAll('video.vertical-video');
+    const verticalVideoCards = document.querySelectorAll('.vertical-video-card');
+    const verticalVideosGrid = document.querySelector('.vertical-videos-grid');
+    const videoCarouselButtons = document.querySelectorAll('.video-carousel-button');
+    const videoPlayToggles = document.querySelectorAll('.video-play-overlay');
+    const videoAudioToggle = document.getElementById('video-audio-toggle');
+
+    function isVideoVisible(video) {
+      const rect = video.getBoundingClientRect();
+      return rect.bottom > 0 && rect.top < window.innerHeight && rect.right > 0 && rect.left < window.innerWidth;
+    }
+
+    const videoVisibilityObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target;
+        const videoCard = video.closest('.vertical-video-card');
+        const isCarouselVideo = videoCard !== null;
+        const isCenterCarouselVideo = !isCarouselVideo || videoCard.dataset.position === 'center';
+
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.2 && isCenterCarouselVideo) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    }, { threshold: [0, 0.2] });
+
+    document.querySelectorAll('video').forEach((video) => {
+      videoVisibilityObserver.observe(video);
+    });
+    function loadBestIllustrationVideo() {
+      return;
+    }
+
+    function updateParallax() {
+      if (window.matchMedia('(max-width: 700px)').matches) {
+        const visibleScroll = Math.max(0, window.innerHeight - fullscreenVideo.getBoundingClientRect().top);
+        const offset = Math.min(visibleScroll * 0.35, 100);
+        fullscreenVideo.style.setProperty('--parallax-offset', `${offset}px`);
+        fullscreenVideo.style.transform = 'none';
+        return;
+      }
+
+      fullscreenVideo.style.removeProperty('--parallax-offset');
+      const scrollY = window.scrollY || window.pageYOffset;
+      const offset = Math.min(scrollY * 0.9, 170);
+      fullscreenVideo.style.transform = `translate3d(0, ${-offset}px, 0)`;
+    }
+
+    function centerReelVideo() {
+      const centerVideo = document.querySelector('.vertical-video-card[data-position="center"] video.vertical-video');
+      if (centerVideo) {
+        centerVideo.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'center' });
+      }
+    }
+
+    verticalVideos.forEach((video) => {
+      const videoCard = video.closest('.vertical-video-card');
+      const videoPlayToggle = videoCard.querySelector('.video-play-overlay');
+
+      video.addEventListener('play', () => {
+        verticalVideos.forEach((otherVideo) => {
+          if (otherVideo !== video) {
+            otherVideo.pause();
+          }
+        });
+        videoPlayToggle.classList.add('is-hidden');
+        videoPlayToggle.setAttribute('aria-label', 'Metti in pausa il video');
+      });
+
+      video.addEventListener('pause', () => {
+        videoPlayToggle.classList.remove('is-hidden');
+        videoPlayToggle.setAttribute('aria-label', 'Riproduci video');
+      });
+
+      videoCard.addEventListener('click', (event) => {
+        if (event.target.closest('.video-play-overlay')) {
+          return;
+        }
+
+        if (!window.matchMedia('(max-width: 700px)').matches && videoCard.dataset.position !== 'center') {
+          rotateVideos(videoCard.dataset.position === 'right' ? 'left' : 'right');
+        }
+      });
+    });
+
+    videoPlayToggles.forEach((videoPlayToggle) => {
+      videoPlayToggle.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const video = videoPlayToggle.closest('.vertical-video-card').querySelector('video.vertical-video');
+
+        if (video.paused) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    });
+
+    videoAudioToggle.addEventListener('click', () => {
+      if (!verticalVideos.length) {
+        return;
+      }
+
+      const shouldMuteVideos = !verticalVideos[0].muted;
+      verticalVideos.forEach((video) => {
+        video.muted = shouldMuteVideos;
+      });
+      videoAudioToggle.classList.toggle('is-muted', shouldMuteVideos);
+      videoAudioToggle.setAttribute('aria-pressed', String(!shouldMuteVideos));
+      videoAudioToggle.setAttribute('aria-label', shouldMuteVideos ? 'Attiva audio' : 'Disattiva audio');
+    });
+
+    function rotateVideos(direction) {
+      const positionsByDirection = direction === 'left'
+        ? { center: 'left', left: 'right', right: 'center' }
+        : { center: 'right', right: 'left', left: 'center' };
+
+      verticalVideoCards.forEach((videoCard) => {
+        const nextPosition = positionsByDirection[videoCard.dataset.position];
+        const video = videoCard.querySelector('video.vertical-video');
+        videoCard.dataset.position = nextPosition;
+        if (!video) {
+          return;
+        }
+
+        video.dataset.position = nextPosition;
+
+        if (nextPosition !== 'center' || !isVideoVisible(video)) {
+          video.pause();
+        } else {
+          video.play().catch(() => {});
+        }
+      });
+    }
+
+    videoCarouselButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        rotateVideos(button.dataset.direction === 'left' ? 'right' : 'left');
+      });
+    });
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    verticalVideosGrid.addEventListener('touchstart', (event) => {
+      touchStartX = event.touches[0].clientX;
+      touchStartY = event.touches[0].clientY;
+    }, { passive: true });
+
+    verticalVideosGrid.addEventListener('touchend', (event) => {
+      if (!window.matchMedia('(max-width: 700px)').matches) {
+        return;
+      }
+
+      const touchEnd = event.changedTouches[0];
+      const horizontalDistance = touchEnd.clientX - touchStartX;
+      const verticalDistance = touchEnd.clientY - touchStartY;
+
+      if (Math.abs(horizontalDistance) < 40 || Math.abs(horizontalDistance) <= Math.abs(verticalDistance)) {
+        return;
+      }
+
+      rotateVideos(horizontalDistance < 0 ? 'left' : 'right');
+    }, { passive: true });
+
+    window.addEventListener('scroll', updateParallax, { passive: true });
+    loadBestIllustrationVideo();
+    updateParallax();
+
+    const reelsLink = document.querySelector('.brand-dropdown a[href$="#reel"]');
+    reelsLink.addEventListener('click', (event) => {
+      event.preventDefault();
+      reelsLink.blur();
+      window.history.pushState(null, '', '#reel');
+      centerReelVideo();
+    });
+
+    window.addEventListener('load', () => {
+      if (window.location.hash === '#reel') {
+        centerReelVideo();
+      }
+    });
+
+    const brandMenu = document.querySelector('.brand-menu');
+    const brandLogo = brandMenu.querySelector('.logo');
+    const brandDropdownLinks = brandMenu.querySelectorAll('.brand-dropdown a');
+
+    brandDropdownLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        brandMenu.classList.remove('is-open');
+        brandLogo.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    brandLogo.addEventListener('click', (event) => {
+      if (window.matchMedia('(max-width: 700px)').matches && !brandMenu.classList.contains('is-open')) {
+        event.preventDefault();
+        brandMenu.classList.add('is-open');
+        brandLogo.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!brandMenu.contains(event.target)) {
+        brandMenu.classList.remove('is-open');
+        brandLogo.setAttribute('aria-expanded', 'false');
+      }
+    });
+  </script>
+
+</body>
+</html>
